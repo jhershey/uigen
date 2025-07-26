@@ -24,6 +24,7 @@ UIGen is an AI-powered React component generator with live preview capabilities.
 - `npm run test` - Run tests using Vitest
 - `npm run test src/components/chat/__tests__/ChatInterface.test.tsx` - Run a specific test file
 - Test files are located in `__tests__` directories alongside components
+- `vitest config is in vitest.config.mts`
 
 ### Linting
 - `npm run lint` - Run ESLint to check code quality
