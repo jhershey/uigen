@@ -61,6 +61,12 @@ afterEach(() => {
 });
 
 test("renders chat interface with message list and input", () => {
+  // Test with messages to ensure message list is rendered
+  (useChat as any).mockReturnValue({
+    ...mockUseChat,
+    messages: [{ id: "1", role: "user", content: "Hello" }],
+  });
+
   render(<ChatInterface />);
 
   expect(screen.getByTestId("message-list")).toBeDefined();
@@ -138,6 +144,12 @@ test("isLoading is false when status is idle", () => {
 
 
 test("scrolls when messages change", () => {
+  // Start with at least one message so MessageList is rendered
+  (useChat as any).mockReturnValue({
+    ...mockUseChat,
+    messages: [{ id: "1", role: "user", content: "Initial message" }],
+  });
+
   const { rerender } = render(<ChatInterface />);
 
   // Get initial scroll container
@@ -160,13 +172,31 @@ test("scrolls when messages change", () => {
   expect(messageList.textContent).toContain("2 messages");
 });
 
+test("renders empty state when no messages", () => {
+  render(<ChatInterface />);
+
+  // Should show welcome message instead of message list
+  expect(screen.queryByTestId("message-list")).toBeNull();
+  expect(screen.getByText("Start a conversation to generate React components")).toBeDefined();
+  expect(screen.getByText("I can help you create buttons, forms, cards, and more")).toBeDefined();
+  
+  // Message input should still be present
+  expect(screen.getByTestId("message-input")).toBeDefined();
+});
+
 test("renders with correct layout classes", () => {
+  // Test with messages to ensure MessageList is rendered
+  (useChat as any).mockReturnValue({
+    ...mockUseChat,
+    messages: [{ id: "1", role: "user", content: "Hello" }],
+  });
+
   const { container } = render(<ChatInterface />);
 
   const mainDiv = container.firstChild as HTMLElement;
   expect(mainDiv.className).toContain("flex");
   expect(mainDiv.className).toContain("flex-col");
-  expect(mainDiv.className).toContain("h-full");
+  expect(mainDiv.className).toContain("flex-1");
   expect(mainDiv.className).toContain("p-4");
   expect(mainDiv.className).toContain("overflow-hidden");
 

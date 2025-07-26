@@ -12,15 +12,13 @@ afterEach(() => {
   cleanup();
 });
 
-test("MessageList shows empty state when no messages", () => {
-  render(<MessageList messages={[]} />);
+test("MessageList renders empty when no messages", () => {
+  const { container } = render(<MessageList messages={[]} />);
 
-  expect(
-    screen.getByText("Start a conversation to generate React components")
-  ).toBeDefined();
-  expect(
-    screen.getByText("I can help you create buttons, forms, cards, and more")
-  ).toBeDefined();
+  // MessageList doesn't show empty state - it just renders empty space
+  const messageContainer = container.querySelector('.space-y-6');
+  expect(messageContainer).toBeDefined();
+  expect(messageContainer?.children.length).toBe(0);
 });
 
 test("MessageList renders user messages", () => {
@@ -78,7 +76,8 @@ test("MessageList renders messages with parts", () => {
   render(<MessageList messages={messages} />);
 
   expect(screen.getByText("Creating your component...")).toBeDefined();
-  expect(screen.getByText("str_replace_editor")).toBeDefined();
+  // The ToolInvocation component converts str_replace_editor to "Editing file"
+  expect(screen.getByText("Editing file")).toBeDefined();
 });
 
 test("MessageList shows content for assistant message with content", () => {
